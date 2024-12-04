@@ -30,7 +30,7 @@ class LessonRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Lesson.objects.all()
 
 
-class LessonRetrieveAPIView(generics.UpdateAPIView):
+class LessonUpdateAPIView(generics.UpdateAPIView):
     """Обновить урок"""
 
     serializer_class = LessonSerializer
