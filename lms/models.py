@@ -21,17 +21,17 @@ class Lesson(models.Model):
     name = models.CharField(max_length=50, verbose_name="Название урока")
     course = models.ForeignKey(
         Course,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
         related_name="lessons",
-        verbose_name="Курсл",
+        verbose_name="Курс",
     )
     preview = models.ImageField(
         upload_to="lms/course", blank=True, null=True, verbose_name="Превью урока"
     )
     description = models.TextField(blank=True, null=True, verbose_name="Описание урока")
-    url = models.CharField(max_length=300, verbose_name="Ссылка на видео")
+    url = models.URLField(max_length=300, verbose_name="Ссылка на видео")
 
     class Meta:
         verbose_name = "Урок"
