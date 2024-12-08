@@ -1,0 +1,29 @@
+[
+{
+    "model": "lms.course",
+    "pk": 1,
+    "fields": {
+        "name": "Математика",
+        "preview": "",
+        "description": null
+    }
+},
+{
+    "model": "lms.course",
+    "pk": 2,
+    "fields": {
+        "name": "Геометрия",
+        "preview": "",
+        "description": null
+    }
+},
+{
+    "model": "lms.course",
+    "pk": 3,
+    "fields": {
+        "name": "ИЗО",
+        "preview": "",
+        "description": "Порисуем?)"
+    }
+}
+]
