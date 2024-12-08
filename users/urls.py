@@ -1,7 +1,7 @@
-from rest_framework.routers import SimpleRouter, DefaultRouter
+from rest_framework.routers import DefaultRouter, SimpleRouter
 
 from .apps import UsersConfig
-from .views import UserViewSet, PaymentViewSet
+from .views import PaymentViewSet, UserViewSet
 
 app_name = UsersConfig.name
 

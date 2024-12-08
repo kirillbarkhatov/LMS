@@ -2,7 +2,7 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from lms.models import Course, Lesson
-from users.models import User, Payment
+from users.models import Payment, User
 
 
 class Command(BaseCommand):
@@ -22,12 +22,9 @@ class Command(BaseCommand):
         # python -Xutf8 manage.py dumpdata users.User --output user_fixture.json --indent 4
         # python -Xutf8 manage.py dumpdata users.Payment --output payment_fixture.json --indent 4
 
-
         # Добавляем данные из фикстур
         call_command("loaddata", "course_fixture.json", format="json")
-        self.stdout.write(
-            self.style.SUCCESS("Курсы загружены из фикстур успешно")
-        )
+        self.stdout.write(self.style.SUCCESS("Курсы загружены из фикстур успешно"))
         call_command("loaddata", "lesson_fixture.json", format="json")
         self.stdout.write(self.style.SUCCESS("Уроки загружены из фикстур успешно"))
 
