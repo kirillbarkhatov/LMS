@@ -1,10 +1,15 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from .models import Course, Lesson
 
 
 class CourseSerializer(ModelSerializer):
     """Сериализатор для курсов"""
+
+    lessons_count = SerializerMethodField()
+
+    def get_lessons_count(self, course):
+        return course.lessons.count()
 
     class Meta:
         model = Course
