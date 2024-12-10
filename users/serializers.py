@@ -20,6 +20,7 @@ class UserSerializer(ModelSerializer):
         model = User
         fields = "__all__"
 
+
 class UserCommonSerializer(ModelSerializer):
     """Сериализатор для пользователя"""
 

@@ -1,7 +1,7 @@
+from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import Group
 
 from lms.models import Course, Lesson
 from users.models import Payment, User
@@ -37,9 +37,7 @@ class Command(BaseCommand):
             group = Group.objects.create(name="Модератор")
             group.save()
             self.stdout.write(
-                self.style.SUCCESS(
-                    f'Успешно создана группа {group.name}'
-                )
+                self.style.SUCCESS(f"Успешно создана группа {group.name}")
             )
 
         # создаем тестовых пользователей их платежи

@@ -3,6 +3,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from users.permissions import IsModer, IsOwner
+
 from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer
 
@@ -27,7 +28,12 @@ class CourseViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         """Устанавливает права на действия пользователя."""
 
-        if self.action in ("list", "retrieve", "update", "partial_update",):
+        if self.action in (
+            "list",
+            "retrieve",
+            "update",
+            "partial_update",
+        ):
             permission_classes = [IsAuthenticated, IsModer | IsOwner]
         elif self.action in ("create",):
             permission_classes = [IsAuthenticated, ~IsModer]
@@ -48,6 +54,7 @@ class LessonCreateApiView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+
 class LessonListApiView(generics.ListAPIView):
     """Список уроков"""
 
@@ -62,6 +69,7 @@ class LessonListApiView(generics.ListAPIView):
         user = self.request.user
         return Lesson.objects.filter(owner=user)
 
+
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     """Получить один урок"""
 
@@ -69,12 +77,14 @@ class LessonRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsModer | IsOwner]
 
+
 class LessonUpdateAPIView(generics.UpdateAPIView):
     """Обновить урок"""
 
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsModer | IsOwner]
+
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     """Удалить урок"""
