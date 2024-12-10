@@ -43,31 +43,42 @@ class LessonCreateApiView(generics.CreateAPIView):
     """Создание урока"""
 
     serializer_class = LessonSerializer
+    permission_classes = [IsAuthenticated, ~IsModer]
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class LessonListApiView(generics.ListAPIView):
     """Список уроков"""
 
     serializer_class = LessonSerializer
-    queryset = Lesson.objects.all()
+    permission_classes = [IsAuthenticated, IsModer | IsOwner]
 
+    def get_queryset(self):
+        """Фильтруем набор данных в зависимости от пользователя"""
+
+        if self.request.user.groups.filter(name="Модератор").exists():
+            return Lesson.objects.all()
+        user = self.request.user
+        return Lesson.objects.filter(owner=user)
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     """Получить один урок"""
 
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-
+    permission_classes = [IsAuthenticated, IsModer | IsOwner]
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
     """Обновить урок"""
 
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-
+    permission_classes = [IsAuthenticated, IsModer | IsOwner]
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     """Удалить урок"""
 
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    permission_classes = [IsAuthenticated, IsOwner]
