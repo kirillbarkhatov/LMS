@@ -119,3 +119,16 @@ class Command(BaseCommand):
                 f"Успешно добавлены платежи для пользователя с email {user.email}"
             )
         )
+
+        # распределяем владельцев
+        courses = Course.objects.all()
+        lessons = Lesson.objects.all()
+        owner = User.objects.get(email="test1@test1.ru")
+        courses.update(owner=owner)
+        lessons.update(owner=owner)
+
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Владельцем всех курсов и уроков, загруженных из фикстур, назначен пользователь {owner.email}"
+            )
+        )

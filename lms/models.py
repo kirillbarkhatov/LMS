@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -9,6 +10,10 @@ class Course(models.Model):
         upload_to="lms/course", blank=True, null=True, verbose_name="Превью курса"
     )
     description = models.TextField(blank=True, null=True, verbose_name="Описание курса")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = "Курс"
@@ -32,6 +37,10 @@ class Lesson(models.Model):
     )
     description = models.TextField(blank=True, null=True, verbose_name="Описание урока")
     url = models.URLField(max_length=300, verbose_name="Ссылка на видео")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = "Урок"
