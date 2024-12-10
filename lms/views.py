@@ -1,6 +1,8 @@
 from rest_framework import generics, viewsets
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
+from users.permissions import IsModer, IsOwner
 from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer
 
@@ -10,15 +12,30 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     model = Course
     serializer_class = CourseSerializer
-    queryset = Course.objects.all()
+
+    def get_queryset(self):
+        """Фильтруем набор данных в зависимости от пользователя"""
+
+        if self.request.user.groups.filter(name="Модератор").exists():
+            return Course.objects.all()
+        user = self.request.user
+        return Course.objects.filter(owner=user)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
     def get_permissions(self):
         """Устанавливает права на действия пользователя."""
 
-        if self.action == 'list':
-            permission_classes = [IsAuthenticated]
+        if self.action in ("list", "retrieve", "update", "partial_update",):
+            permission_classes = [IsAuthenticated, IsModer | IsOwner]
+        elif self.action in ("create",):
+            permission_classes = [IsAuthenticated, ~IsModer]
+        elif self.action in ("destroy",):
+            permission_classes = [IsAuthenticated, IsOwner]
         else:
-            permission_classes = [IsAdminUser]
+            permission_classes = [IsAuthenticated]
+
         return [permission() for permission in permission_classes]
 
 
