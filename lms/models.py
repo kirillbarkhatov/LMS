@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 
+from users.models import User
+
 
 class Course(models.Model):
     """Модель для курса"""
@@ -49,3 +51,17 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
+
+
+class CourseEnrollment(models.Model):
+    """Модель подписки на курс"""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_course_enrollment", verbose_name="Пользователь")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_enrollment", verbose_name="Курс")
+
+    def __str__(self):
+        return  f"{self.user.name} - {self.course.name}"
+
+    class Meta:
+        verbose_name = "Подписка на курс"
+        verbose_name_plural = "Подписки на курсы"
