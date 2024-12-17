@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-from users.models import User
+from config.settings import AUTH_USER_MODEL
 
 
 class Course(models.Model):
@@ -13,7 +13,7 @@ class Course(models.Model):
     )
     description = models.TextField(blank=True, null=True, verbose_name="Описание курса")
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
+        AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
     )
 
     def __str__(self):
@@ -42,7 +42,7 @@ class Lesson(models.Model):
     description = models.TextField(blank=True, null=True, verbose_name="Описание урока")
     url = models.URLField(max_length=300, verbose_name="Ссылка на видео")
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
+        AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
     )
 
     def __str__(self):
@@ -56,7 +56,7 @@ class Lesson(models.Model):
 class CourseEnrollment(models.Model):
     """Модель подписки на курс"""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_course_enrollment", verbose_name="Пользователь")
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_course_enrollment", verbose_name="Пользователь")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_enrollment", verbose_name="Курс")
 
     def __str__(self):
