@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Course, Lesson, CourseSubscription
+from .models import Course, CourseSubscription, Lesson
 from .validators import validate_lesson_url
 
 
@@ -38,4 +38,3 @@ class CourseSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseSubscription
         fields = ["course"]
-

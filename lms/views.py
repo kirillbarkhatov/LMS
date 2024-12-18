@@ -6,9 +6,10 @@ from rest_framework.response import Response
 
 from users.permissions import IsModer, IsOwner
 
-from .models import Course, Lesson, CourseSubscription
+from .models import Course, CourseSubscription, Lesson
 from .paginators import TwoItemsPaginator
-from .serializers import CourseSerializer, LessonSerializer, CourseSubscriptionSerializer
+from .serializers import (CourseSerializer, CourseSubscriptionSerializer,
+                          LessonSerializer)
 
 
 class CourseViewSet(viewsets.ModelViewSet):

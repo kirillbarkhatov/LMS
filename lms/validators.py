@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 def validate_lesson_url(value):
     """Валидатор ссылок на уроки"""
 
