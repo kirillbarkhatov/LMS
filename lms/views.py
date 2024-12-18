@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from users.permissions import IsModer, IsOwner
 
 from .models import Course, Lesson, CourseSubscription
+from .paginators import TwoItemsPaginator
 from .serializers import CourseSerializer, LessonSerializer, CourseSubscriptionSerializer
 
 
@@ -15,6 +16,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     model = Course
     serializer_class = CourseSerializer
+    pagination_class = TwoItemsPaginator
 
     def get_queryset(self):
         """Фильтруем набор данных в зависимости от пользователя"""
@@ -62,6 +64,7 @@ class LessonListApiView(generics.ListAPIView):
 
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModer | IsOwner]
+    pagination_class = TwoItemsPaginator
 
     def get_queryset(self):
         """Фильтруем набор данных в зависимости от пользователя"""
