@@ -1,25 +1,41 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework import serializers
 
-from .models import Course, Lesson
+from .models import Course, CourseSubscription, Lesson
+from .validators import validate_lesson_url
 
 
-class LessonSerializer(ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer):
     """Сериализатор для уроков"""
+
+    url = serializers.URLField(validators=[validate_lesson_url])
 
     class Meta:
         model = Lesson
         fields = "__all__"
 
 
-class CourseSerializer(ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     """Сериализатор для курсов"""
 
-    lessons_count = SerializerMethodField()
+    lessons_count = serializers.SerializerMethodField()
+    subscription = serializers.SerializerMethodField()
     lessons = LessonSerializer(many=True, read_only=True)
 
     def get_lessons_count(self, course):
         return course.lessons.count()
 
+    def get_subscription(self, course):
+        current_user = self.context.get('request', None).user
+        return course.course_subscription.filter(user=current_user).exists()
+
     class Meta:
         model = Course
         fields = "__all__"
+
+
+class CourseSubscriptionSerializer(serializers.ModelSerializer):
+    """Сериализатор подписки на курс"""
+
+    class Meta:
+        model = CourseSubscription
+        fields = ["course"]
