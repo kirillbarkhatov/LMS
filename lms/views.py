@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, views
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -100,7 +100,7 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, IsOwner]
 
 
-class CourseSubscriptionApiView(generics.CreateAPIView):
+class CourseSubscriptionApiView(views.APIView):
     """Подписка на курс"""
 
     serializer_class = CourseSubscriptionSerializer
@@ -108,7 +108,6 @@ class CourseSubscriptionApiView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        # return self.create(request, *args, **kwargs)
 
         user = self.request.user
         course_id = self.request.data.get("course")
