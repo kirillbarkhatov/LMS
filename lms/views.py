@@ -1,15 +1,17 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, viewsets, views
+from rest_framework import generics, views, viewsets
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from users.permissions import IsModer, IsOwner
 
-from .models import Course, CourseSubscription, Lesson, CoursePayment
+from .models import Course, CoursePayment, CourseSubscription, Lesson
 from .paginators import TwoItemsPaginator
-from .serializers import (CourseSerializer, CourseSubscriptionSerializer,
-                          LessonSerializer, CoursePaymentSerializer)
+from .serializers import (CoursePaymentSerializer, CourseSerializer,
+                          CourseSubscriptionSerializer, LessonSerializer)
+from .services import (convert_rub_to_usd, create_stipe_price,
+                       create_stripe_session)
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -129,9 +131,17 @@ class CoursePaymentCreateApiView(generics.CreateAPIView):
     """Оплата за курс"""
 
     serializer_class = CoursePaymentSerializer
-    queryset = CoursePayment.objects.all()
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        # serializer.save(owner=self.request.user)
-        pass
+        payment = serializer.save(user=self.request.user)
+        course_id = self.request.data.get("course")
+        course = get_object_or_404(Course, id=course_id)
+        amount_in_usd = course.price
+        payment = serializer.save(amount=amount_in_usd)
+        # amount_in_usd = convert_rub_to_usd(100)
+        price = create_stipe_price(amount_in_usd, course.name)
+        session_id, payment_link = create_stripe_session(price)
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()

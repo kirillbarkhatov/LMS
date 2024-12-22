@@ -12,9 +12,7 @@ class Course(models.Model):
         upload_to="lms/course", blank=True, null=True, verbose_name="Превью курса"
     )
     description = models.TextField(blank=True, null=True, verbose_name="Описание курса")
-    price = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0, verbose_name="Цена в рублях"
-    )
+    price = models.PositiveIntegerField(default=100, verbose_name="Цена в долларах США")
     owner = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
     )
@@ -83,10 +81,23 @@ class CourseSubscription(models.Model):
 class CoursePayment(models.Model):
     """Модель для оплаты курсов"""
 
-    amount = models.PositiveIntegerField(verbose_name="Сумма оплаты")
-    session_id = models.CharField(max_length=255, blank=True, null=True, verbose_name="ID сессии")
-    link = models.URLField(max_length=400, blank=True, null=True, verbose_name="Ссылка на оплату")
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_course_payments", verbose_name="Пользователь")
+    amount = models.PositiveIntegerField(
+        blank=True, null=True, verbose_name="Сумма оплаты"
+    )
+    session_id = models.CharField(
+        max_length=255, blank=True, null=True, verbose_name="ID сессии"
+    )
+    link = models.URLField(
+        max_length=400, blank=True, null=True, verbose_name="Ссылка на оплату"
+    )
+    user = models.ForeignKey(
+        AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="user_course_payments",
+        verbose_name="Пользователь",
+    )
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
@@ -100,4 +111,3 @@ class CoursePayment(models.Model):
     class Meta:
         verbose_name = "Оплата за курс"
         verbose_name_plural = "Оплаты за курсы"
-

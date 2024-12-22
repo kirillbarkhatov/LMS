@@ -7,3 +7,4 @@ django-filter==24.3
 djangorestframework-simplejwt==5.3.1
 drf-yasg==1.21.8
 stripe==11.4.1
+forex-python==1.8

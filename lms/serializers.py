@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Course, CourseSubscription, Lesson, CoursePayment
+from .models import Course, CoursePayment, CourseSubscription, Lesson
 from .validators import validate_lesson_url
 
 
@@ -25,7 +25,7 @@ class CourseSerializer(serializers.ModelSerializer):
         return course.lessons.count()
 
     def get_subscription(self, course):
-        current_user = self.context.get('request', None).user
+        current_user = self.context.get("request", None).user
         return course.course_subscription.filter(user=current_user).exists()
 
     class Meta:

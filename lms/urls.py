@@ -2,8 +2,8 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .apps import LmsConfig
-from .views import (CourseSubscriptionApiView, CourseViewSet,
-                    LessonCreateApiView, LessonDestroyAPIView,
+from .views import (CoursePaymentCreateApiView, CourseSubscriptionApiView,
+                    CourseViewSet, LessonCreateApiView, LessonDestroyAPIView,
                     LessonListApiView, LessonRetrieveAPIView,
                     LessonUpdateAPIView)
 
@@ -23,6 +23,7 @@ urlpatterns = [
     path(
         "course/subscribe", CourseSubscriptionApiView.as_view(), name="course_subscribe"
     ),
+    path("payment/", CoursePaymentCreateApiView.as_view(), name="payment"),
 ]
 
 urlpatterns += router.urls
