@@ -12,6 +12,9 @@ class Course(models.Model):
         upload_to="lms/course", blank=True, null=True, verbose_name="Превью курса"
     )
     description = models.TextField(blank=True, null=True, verbose_name="Описание курса")
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0, verbose_name="Цена в рублях"
+    )
     owner = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
     )

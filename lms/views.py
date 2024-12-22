@@ -6,10 +6,10 @@ from rest_framework.response import Response
 
 from users.permissions import IsModer, IsOwner
 
-from .models import Course, CourseSubscription, Lesson
+from .models import Course, CourseSubscription, Lesson, CoursePayment
 from .paginators import TwoItemsPaginator
 from .serializers import (CourseSerializer, CourseSubscriptionSerializer,
-                          LessonSerializer)
+                          LessonSerializer, CoursePaymentSerializer)
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -123,3 +123,15 @@ class CourseSubscriptionApiView(views.APIView):
             message = "подписка добавлена"
 
         return Response({"message": message})
+
+
+class CoursePaymentCreateApiView(generics.CreateAPIView):
+    """Оплата за курс"""
+
+    serializer_class = CoursePaymentSerializer
+    queryset = CoursePayment.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        # serializer.save(owner=self.request.user)
+        pass
