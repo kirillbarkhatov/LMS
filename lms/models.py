@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 
+from config.settings import AUTH_USER_MODEL
+
 
 class Course(models.Model):
     """Модель для курса"""
@@ -11,7 +13,7 @@ class Course(models.Model):
     )
     description = models.TextField(blank=True, null=True, verbose_name="Описание курса")
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
+        AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
     )
 
     def __str__(self):
@@ -40,7 +42,7 @@ class Lesson(models.Model):
     description = models.TextField(blank=True, null=True, verbose_name="Описание урока")
     url = models.URLField(max_length=300, verbose_name="Ссылка на видео")
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
+        AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
     )
 
     def __str__(self):
@@ -49,3 +51,27 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
+
+
+class CourseSubscription(models.Model):
+    """Модель подписки на курс"""
+
+    user = models.ForeignKey(
+        AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="user_course_subscription",
+        verbose_name="Пользователь",
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name="course_subscription",
+        verbose_name="Курс",
+    )
+
+    def __str__(self):
+        return f"{self.user.name} - {self.course.name}"
+
+    class Meta:
+        verbose_name = "Подписка на курс"
+        verbose_name_plural = "Подписки на курсы"
