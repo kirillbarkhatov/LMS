@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from users.permissions import IsModer, IsOwner
+from .tasks import add
 
 from .models import Course, CoursePayment, CourseSubscription, Lesson
 from .paginators import TwoItemsPaginator
@@ -50,6 +51,10 @@ class CourseViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated]
 
         return [permission() for permission in permission_classes]
+
+    def perform_update(self, serializer):
+        add.delay()
+        serializer.save()
 
 
 class LessonCreateApiView(generics.CreateAPIView):
