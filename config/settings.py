@@ -155,11 +155,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
 
-# Настройки срока действия токенов
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-}
+# # Настройки срока действия токенов
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+# }
 
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 

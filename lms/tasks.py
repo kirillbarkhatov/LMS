@@ -17,6 +17,7 @@ def send_mail_course_update(course_id):
     recipient_list = [sub.user.email
                  for sub in subscriptions
                  ]
+    # recipient_list.append(DEFAULT_FROM_EMAIL)
     print(recipient_list)
 
     # self.object = self.get_object()
