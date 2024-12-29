@@ -192,7 +192,7 @@ CELERY_BEAT_SCHEDULE = {
     "task-user_deactivator": {
         "task": "users.tasks.user_deactivator",  # Путь к задаче
         "schedule": timedelta(
-            seconds=5
+            days=1
         ),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
 }

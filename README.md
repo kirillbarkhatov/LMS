@@ -40,6 +40,37 @@
 
 Для тестирования можно использовать фикстуры - заполните БД тестовыми данными, используя команду `python3 manage.py add_test_data`.
 
+### Почта
+
+Внесите учетные данные в `.env`.
+
+Используйте отдельный пароль для приложений, который создаётся в настройках безопасности учетной записи почтового сервиса.
+
+Первые 4 поля - пример настроек для `mail.ru`
+
+`EMAIL_HOST=smtp.mail.ru`
+
+`EMAIL_PORT=465`
+
+`EMAIL_USE_SSL=True`
+
+`EMAIL_USE_TLS=False`
+
+`EMAIL_HOST_USER=`
+
+`EMAIL_HOST_PASSWORD=`
+
+
+### Настройки celery
+
+Внесите настройки для celery
+
+Ниже пример настроек при использовании redis на том же хосте (используется по умолчанию)
+
+`CELERY_BROKER_URL=redis://localhost:6379/0`
+
+`CELERY_RESULT_BACKEND=redis://localhost:6379/0`
+
 ### Запуск проекта
 
 Примените миграции `python3 manage.py migrate`.
@@ -49,6 +80,10 @@
 Подгрузите тестовые данные `python3 manage.py add_test_data`
 
 Запустите локальный HTTP-сервер командой `python3 manage.py runserver`.
+
+Запустите celery-worker `celery -A config worker -l INFO`.
+
+Запустите celery-beat `celery -A config beat -l INFO`.
 
 ## Использование:
 

@@ -11,5 +11,6 @@ def user_deactivator():
     """Деактивация пользователей, которые не заходили более месяца"""
 
     users = User.objects.filter(last_login__lt=now() - timedelta(days=30))
-    users.update(is_active=False)
-    users.save()
+    if users.count() > 0:
+        users.update(is_active=False)
+        users.save()
