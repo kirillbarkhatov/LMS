@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from users.permissions import IsModer, IsOwner
-from .tasks import send_mail_course_update
 
 from .models import Course, CoursePayment, CourseSubscription, Lesson
 from .paginators import TwoItemsPaginator
@@ -13,6 +12,7 @@ from .serializers import (CoursePaymentSerializer, CourseSerializer,
                           CourseSubscriptionSerializer, LessonSerializer)
 from .services import (convert_rub_to_usd, create_stipe_price,
                        create_stripe_session)
+from .tasks import send_mail_course_update
 
 
 class CourseViewSet(viewsets.ModelViewSet):

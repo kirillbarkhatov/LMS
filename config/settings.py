@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "django_filters",
     "drf_yasg",
-    'django_celery_beat',
+    "django_celery_beat",
     "lms",
     "users",
 ]
@@ -189,8 +189,10 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Настройки для Celery
 CELERY_BEAT_SCHEDULE = {
-    'task-user_deactivator': {
-        'task': 'users.tasks.user_deactivator',  # Путь к задаче
-        'schedule': timedelta(seconds=5),  # Расписание выполнения задачи (например, каждые 10 минут)
+    "task-user_deactivator": {
+        "task": "users.tasks.user_deactivator",  # Путь к задаче
+        "schedule": timedelta(
+            seconds=5
+        ),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
 }

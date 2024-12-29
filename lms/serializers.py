@@ -53,7 +53,6 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class CoursePaymentSerializer(serializers.ModelSerializer):
     """Сериализатор для оплаты курсов"""
 
