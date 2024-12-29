@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from users.permissions import IsModer, IsOwner
-from .tasks import add
+from .tasks import send_mail_course_update
 
 from .models import Course, CoursePayment, CourseSubscription, Lesson
 from .paginators import TwoItemsPaginator
@@ -53,7 +53,16 @@ class CourseViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_update(self, serializer):
-        add.delay()
+        course_id = self.kwargs.get("pk")
+        send_mail_course_update.delay(course_id)
+        # course = get_object_or_404(Course, id=course_id)
+        # subscriptions = course.course_subscription.all()
+        #
+        # # Преобразуем в список словарей
+        # subs_data = [sub.user.email
+        #              for sub in subscriptions
+        #              ]
+        # print(subs_data)
         serializer.save()
 
 

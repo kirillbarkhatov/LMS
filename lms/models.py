@@ -71,7 +71,7 @@ class CourseSubscription(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.name} - {self.course.name}"
+        return f"{self.user.email} - {self.course.name}"
 
     class Meta:
         verbose_name = "Подписка на курс"
