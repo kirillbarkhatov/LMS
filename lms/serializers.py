@@ -14,11 +14,20 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CourseSubscriptionSerializer(serializers.ModelSerializer):
+    """Сериализатор подписки на курс"""
+
+    class Meta:
+        model = CourseSubscription
+        fields = ["course"]
+
+
 class CourseSerializer(serializers.ModelSerializer):
     """Сериализатор для курсов"""
 
     lessons_count = serializers.SerializerMethodField()
     subscription = serializers.SerializerMethodField()
+    # subs = serializers.SerializerMethodField()
     lessons = LessonSerializer(many=True, read_only=True)
 
     def get_lessons_count(self, course):
@@ -28,17 +37,20 @@ class CourseSerializer(serializers.ModelSerializer):
         current_user = self.context.get("request", None).user
         return course.course_subscription.filter(user=current_user).exists()
 
+    # def get_subs(self, course):
+    #     # Получаем подписки
+    #     subscriptions = course.course_subscription.all()
+    #
+    #     # Преобразуем в список словарей
+    #     subs_data = [sub.user.email
+    #         for sub in subscriptions
+    #     ]
+    #
+    #     return subs_data
+
     class Meta:
         model = Course
         fields = "__all__"
-
-
-class CourseSubscriptionSerializer(serializers.ModelSerializer):
-    """Сериализатор подписки на курс"""
-
-    class Meta:
-        model = CourseSubscription
-        fields = ["course"]
 
 
 class CoursePaymentSerializer(serializers.ModelSerializer):

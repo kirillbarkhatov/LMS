@@ -8,3 +8,6 @@ djangorestframework-simplejwt==5.3.1
 drf-yasg==1.21.8
 stripe==11.4.1
 forex-python==1.8
+redis==5.2.1
+celery==5.4.0
+django-celery-beat==2.7.0

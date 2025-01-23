@@ -12,6 +12,7 @@ from .serializers import (CoursePaymentSerializer, CourseSerializer,
                           CourseSubscriptionSerializer, LessonSerializer)
 from .services import (convert_rub_to_usd, create_stipe_price,
                        create_stripe_session)
+from .tasks import send_mail_course_update
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -50,6 +51,19 @@ class CourseViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated]
 
         return [permission() for permission in permission_classes]
+
+    def perform_update(self, serializer):
+        course_id = self.kwargs.get("pk")
+        send_mail_course_update.delay(course_id)
+        # course = get_object_or_404(Course, id=course_id)
+        # subscriptions = course.course_subscription.all()
+        #
+        # # Преобразуем в список словарей
+        # subs_data = [sub.user.email
+        #              for sub in subscriptions
+        #              ]
+        # print(subs_data)
+        serializer.save()
 
 
 class LessonCreateApiView(generics.CreateAPIView):
