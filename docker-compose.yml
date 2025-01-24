@@ -1,29 +1,62 @@
-version: '3.9'
-
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_app
     command: >
-        bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
     env_file:
       - .env
     volumes:
       - .:/code
-      - static_volume:/code/static
-    ports:
-      - "8000:8000"
-  db:
-    image: postgres
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: celery_worker
+    command: >
+      sh -c "celery -A config worker --loglevel=info"
     env_file:
       - .env
-    expose:
-      - "5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSGTRES_USER"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    volumes:
+      - ./app:/app
+    depends_on:
+      - redis
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: celery_beat
+    command: >
+      sh -c "celery -A config beat --loglevel=info"
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+    depends_on:
+      - redis
+
+  db:
+    image: postgres:16
+    container_name: postgres_db
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: redis
+
 
 volumes:
   postgres_data:
-  static_volume:
