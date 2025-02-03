@@ -13,3 +13,4 @@ celery==5.4.0
 django-celery-beat==2.7.0
 gunicorn
 django-redis
+flake8==7.1.1

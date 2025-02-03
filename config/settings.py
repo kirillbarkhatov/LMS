@@ -14,8 +14,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-import dotenv
-from django.conf.global_settings import AUTH_USER_MODEL, MEDIA_ROOT, MEDIA_URL
 from dotenv import load_dotenv
 
 load_dotenv()
