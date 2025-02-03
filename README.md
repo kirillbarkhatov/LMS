@@ -73,17 +73,21 @@
 
 ### Запуск проекта
 
-Примените миграции `python3 manage.py migrate`.
+Используйте `Docker`.
 
-Создайте суперпользователя `python3 manage.py csu`.
+#### Сборка и запуск проекта с Docker Compose
+Для запуска проекта с использованием Docker Compose выполните следующую команду:
+`docker-compose up --build`
 
-Подгрузите тестовые данные `python3 manage.py add_test_data`
+#### Команды для управления
 
-Запустите локальный HTTP-сервер командой `python3 manage.py runserver`.
+`docker-compose up -d` - запустит контейнеры в фоновом режиме
 
-Запустите celery-worker `celery -A config worker -l INFO`.
+`docker-compose down` — останавливает все работающие контейнеры и удаляет контейнеры, сети, тома и образы, созданные командой
 
-Запустите celery-beat `celery -A config beat -l INFO`.
+`docker-compose logs` — позволяет просматривать логи всех контейнеров. Это полезно для отладки и мониторинга работы контейнеров.
+
+`docker-compose ps` — выводит список всех контейнеров, созданных Docker Compose, и их текущее состояние
 
 ## Использование:
 
