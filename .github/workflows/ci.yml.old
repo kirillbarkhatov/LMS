@@ -1,4 +1,4 @@
-name: Django CI/CD
+name: Django CI
 
 on: [push, pull_request]
 
@@ -10,9 +10,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses : actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.13"
 
       - name: Install flake8
         run: |
@@ -32,7 +32,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.13"
 
       - name: Install dependencies
         run: |
@@ -49,17 +49,19 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
+      - name: Log in in Docker hub
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
-      - name: Build and push Docker images
-        run: |
-          docker-compose build
-          docker-compose push
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
+
+      - name: Push Docker image in Docker hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -70,12 +72,8 @@ jobs:
         run: |
           ssh -T -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-
-            cd /root/LMS  # Убедитесь, что путь правильный!
-
-            docker compose down
-            docker compose pull
-            docker compose up -d --remove-orphans
-
-            docker image prune -f
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            docker stop myapp || true
+            docker rm myapp || true
+            docker run -d --name myapp -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
           EOF
