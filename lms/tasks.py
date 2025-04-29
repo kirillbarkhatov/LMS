@@ -26,7 +26,7 @@ def send_mail_course_update(course_id):
 
             responses[recipient] = "Успешно отправлено"
         except Exception as e:
-            response = f"{recipient}: Ошибка: {str(e)}"
+            # response = f"{recipient}: Ошибка: {str(e)}"
             responses[recipient] = f"Ошибка: {str(e)}"
 
     print(responses)
